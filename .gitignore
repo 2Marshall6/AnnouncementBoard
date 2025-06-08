@@ -1,0 +1,19 @@
+# Игнорируем временные файлы, логи и сборочные директории
+*.log
+bin/
+obj/
+.vscode/
+node_modules/
+
+# Игнорируем настройки IDE
+.vs/
+*.user
+*.suo
+
+# Игнорируем артефакты тестов
+TestResult.xml
+TestResult*/
+
+# Включаем необходимые файлы для Docker
+!dist/
+!nginx.conf.spa
