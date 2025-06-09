@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AnnouncementBoard.BLL\AnnouncementBoard.BLL.csproj" />
     <ProjectReference Include="..\AnnouncementBoard.DAL\AnnouncementBoard.DAL.csproj" />
   </ItemGroup>

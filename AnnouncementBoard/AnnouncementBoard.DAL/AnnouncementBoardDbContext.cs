@@ -1,4 +1,5 @@
-﻿using AnnouncementBoard.DAL.Entitys;
+﻿using AnnouncementBoard.DAL.Configurations;
+using AnnouncementBoard.DAL.Entitys;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementBoard.DAL
@@ -17,6 +18,9 @@ namespace AnnouncementBoard.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new CategoryConfigurations());
+            modelBuilder.ApplyConfiguration(new SubCategoryConfigurations());
 
             modelBuilder.Entity<SubCategory>(entity =>
             {

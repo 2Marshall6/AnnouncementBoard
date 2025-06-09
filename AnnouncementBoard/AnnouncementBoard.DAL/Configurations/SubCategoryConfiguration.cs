@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AnnouncementBoard.DAL.Configurations
 {
-    class SubCategoryConfiguration : IEntityTypeConfiguration<SubCategory>
+    class SubCategoryConfigurations : IEntityTypeConfiguration<SubCategory>
     {
         public void Configure(EntityTypeBuilder<SubCategory> builder)
         {
