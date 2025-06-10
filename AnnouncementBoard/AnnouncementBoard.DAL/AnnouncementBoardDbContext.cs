@@ -22,27 +22,23 @@ namespace AnnouncementBoard.DAL
             modelBuilder.ApplyConfiguration(new CategoryConfigurations());
             modelBuilder.ApplyConfiguration(new SubCategoryConfigurations());
 
-            modelBuilder.Entity<SubCategory>(entity =>
-            {
-                entity.HasKey(s => s.Id);
+            modelBuilder.Entity<SubCategory>()
+                .HasOne(sc => sc.Category)
+                .WithMany(c => c.SubCategories)
+                .HasForeignKey(sc => sc.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(s => s.Category)
-                    .WithMany(c => c.SubCategories)
-                    .HasForeignKey(s => s.CategoryId);
-            });
+            modelBuilder.Entity<Announcement>()
+                .HasOne(a => a.Category)
+                .WithMany(c => c.Announcements)
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Announcement>(entity =>
-            {
-                entity.HasKey(a => a.Id);
-
-                entity.HasOne(a => a.Category)
-                    .WithMany(c => c.Announcements)
-                    .HasForeignKey(a => a.CategoryId);
-
-                entity.HasOne(a => a.SubCategory)
-                    .WithMany(s => s.Announcements)
-                    .HasForeignKey(a => a.SubCategoryId);
-            });
+            modelBuilder.Entity<Announcement>()
+                .HasOne(a => a.SubCategory)
+                .WithMany(sc => sc.Announcements)
+                .HasForeignKey(a => a.SubCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

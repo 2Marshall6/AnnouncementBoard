@@ -18,7 +18,7 @@ namespace AnnouncementBoard.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementDto createModel)
         {
-            var createdAnnouncement = await _announcementService.CreateAnnouncementAsync(createModel);
+            await _announcementService.CreateAnnouncementAsync(createModel);
             return Ok("Announcement has been created");
         }
 

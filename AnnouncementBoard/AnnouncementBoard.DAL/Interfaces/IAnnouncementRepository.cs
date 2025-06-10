@@ -9,10 +9,12 @@ namespace AnnouncementBoard.DAL.Interfaces
 {
     public interface IAnnouncementRepository
     {
-        Task<int> CreateAsync(Announcement announcement);
+        Task CreateAsync(Announcement announcement);
+        Task UpdateAsync(int id, string title, string description, bool status, Category category, SubCategory subCategory);
+        Task DeleteAsync(int id);
         Task<IEnumerable<Announcement>> GetAllAsync();
-        Task<Announcement?> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(Announcement announcement);
-        Task<bool> DeleteAsync(int id);
+        Task<SubCategory?> GetSubCategoryByNameAsync(string name);
+        Task<Category?> GetCategoryByNameAsync(string name);
+
     }
 }

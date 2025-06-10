@@ -1,33 +1,72 @@
 ﻿using AnnouncementBoard.DAL.Entitys;
 using AnnouncementBoard.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementBoard.DAL.Repositories
 {
     public class AnnouncementRepository : IAnnouncementRepository
     {
-        public Task<int> CreateAsync(Announcement announcement)
+        private readonly AnnouncementBoardDbContext _context;
+
+        public AnnouncementRepository(AnnouncementBoardDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task CreateAsync(Announcement announcement)
         {
-            throw new NotImplementedException();
+            await _context.Announcements.AddAsync(announcement);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Announcement>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _context.Announcements
+                .Where(a => a.Id == id)
+                .ExecuteDeleteAsync();
+
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Announcement?> GetByIdAsync(int id)
+        public async Task UpdateAsync(int id, string title, string description, bool status, Category category, SubCategory subCategory)
         {
-            throw new NotImplementedException();
+            await _context.Announcements
+                .Where(a => a.Id == id)
+                .ExecuteUpdateAsync(a => a
+                    .SetProperty(a => a.Title, title)
+                    .SetProperty(a => a.Description, description)
+                    .SetProperty(a => a.Status, status)
+                    .SetProperty(a => a.CategoryId, category.Id)
+                    .SetProperty(a => a.SubCategoryId, subCategory.Id));
         }
 
-        public Task<bool> UpdateAsync(Announcement announcement)
+        public async Task<IEnumerable<Announcement>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var announcements = await _context.Announcements
+                .Include(a => a.Category)
+                .Include(a => a.SubCategory)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return announcements;
+        }
+
+        public async Task<Category?> GetCategoryByNameAsync(string name)
+        {
+            var category = await _context.Categories
+                    .Where(s => s.Name.ToLower() == name.ToLower())
+                    .FirstOrDefaultAsync();
+
+            return category;
+        }
+
+        public async Task<SubCategory?> GetSubCategoryByNameAsync(string name)
+        {
+            var subCategory = await _context.SubCategories
+                    .Where(s => s.Name.ToLower() == name.ToLower())
+                    .FirstOrDefaultAsync();
+
+            return subCategory;
         }
     }
 }

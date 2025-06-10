@@ -13,8 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
-builder.Services.AddDbContextPool<AnnouncementBoardDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddDbContextPool<AnnouncementBoardDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

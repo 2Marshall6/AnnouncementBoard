@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace AnnouncementBoard.BLL.Models
 {
-    public record DeleteAnnouncementDto(int id);
+    public record DeleteAnnouncementDto(int Id);
 }

@@ -1,11 +1,7 @@
 ﻿using AnnouncementBoard.BLL.Interfaces;
 using AnnouncementBoard.BLL.Models;
+using AnnouncementBoard.DAL.Entitys;
 using AnnouncementBoard.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AnnouncementBoard.BLL.Services
 {
@@ -17,24 +13,59 @@ namespace AnnouncementBoard.BLL.Services
             _announcementRepository = announcementRepository;
         }
 
-        public Task<AnnouncementDto> CreateAnnouncementAsync(CreateAnnouncementDto createModel)
+        public async Task CreateAnnouncementAsync(CreateAnnouncementDto createModel)
         {
-            throw new NotImplementedException();
+            var subCategory = await _announcementRepository.GetSubCategoryByNameAsync(createModel.SubCategory);
+            var category = await _announcementRepository.GetCategoryByNameAsync(createModel.Category);
+
+
+            var announcement = new Announcement
+            {
+                Id = createModel.Id,
+                Title = createModel.Title,
+                Description = createModel.Description,
+                Status = createModel.Status,
+                Category = category,
+                SubCategory = subCategory
+            };
+            await _announcementRepository.CreateAsync(announcement);
         }
 
-        public Task DeleteAnnouncementAsync(DeleteAnnouncementDto deleteModel)
+        public async Task<IEnumerable<AnnouncementDto>> GetAnnouncementsAsync()
         {
-            throw new NotImplementedException();
+            var announcements = await _announcementRepository.GetAllAsync();
+
+            return announcements.Select(a => new AnnouncementDto(
+                a.Id,
+                a.Title,
+                a.Description,
+                a.CreatedDate,
+                a.Status,
+                a.Category?.Name,
+                a.SubCategory?.Name
+            ));
         }
 
-        public Task<IEnumerable<AnnouncementDto>> GetAnnouncementsAsync()
+        public async Task UpdateAnnouncementAsync(UpdateAnnouncementDto updateModel)
         {
-            throw new NotImplementedException();
+            var category = await _announcementRepository.GetCategoryByNameAsync(updateModel.Category);
+            if (category == null)
+            {
+                throw new NullReferenceException("Such category doesnt exist");
+            }
+
+            var subCategory = await _announcementRepository.GetSubCategoryByNameAsync(updateModel.SubCategory);
+            if (subCategory == null)
+            {
+                throw new NullReferenceException("Such subCategory doesnt exist");
+            }
+
+            await _announcementRepository.UpdateAsync(updateModel.Id, updateModel.Title, updateModel.Description, updateModel.Status, category, subCategory);
         }
 
-        public Task UpdateAnnouncementAsync(UpdateAnnouncementDto updateModel)
+        public async Task DeleteAnnouncementAsync(DeleteAnnouncementDto deleteModel)
         {
-            throw new NotImplementedException();
+            await _announcementRepository.DeleteAsync(deleteModel.Id);
         }
     }
 }
