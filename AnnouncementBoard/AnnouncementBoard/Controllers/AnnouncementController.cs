@@ -16,31 +16,43 @@ namespace AnnouncementBoard.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementDto createModel)
+        public async Task<IActionResult> CreateAnnouncement([FromQuery] CreateAnnouncementDto createModel)
         {
-            await _announcementService.CreateAnnouncementAsync(createModel);
-            return Ok("Announcement has been created");
+            var result = await _announcementService.CreateAnnouncementAsync(createModel);
+            if (result.IsSuccess)
+                return Ok(new { message = result.Message });
+
+            return BadRequest(new { error = result.ErrorMessage });
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAnnouncement([FromBody] UpdateAnnouncementDto updateModel)
+        public async Task<IActionResult> UpdateAnnouncement([FromQuery] UpdateAnnouncementDto updateModel)
         {
-            await _announcementService.UpdateAnnouncementAsync(updateModel);
-            return Ok("Announcement has been updated");
+            var result = await _announcementService.UpdateAnnouncementAsync(updateModel);
+            if (result.IsSuccess)
+                return Ok(new { message = result.Message });
+
+            return BadRequest(new { error = result.ErrorMessage });
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteAnnouncement([FromBody] DeleteAnnouncementDto deleteModel)
+        public async Task<IActionResult> DeleteAnnouncement([FromQuery] DeleteAnnouncementDto deleteModel)
         {
-            await _announcementService.DeleteAnnouncementAsync(deleteModel);
-            return Ok("Announcement has been deleted");
+            var result = await _announcementService.DeleteAnnouncementAsync(deleteModel);
+            if (result.IsSuccess)
+                return Ok(new { message = result.Message });
+
+            return BadRequest(new { error = result.ErrorMessage });
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAnnouncements()
+        public async Task<IActionResult> GetAnnouncements([FromQuery] FilterAnnouncementDto filterModel)
         {
-            var announcements = await _announcementService.GetAnnouncementsAsync();
-            return Ok(announcements);
+            var announcements = await _announcementService.GetAnnouncementsAsync(filterModel);
+            if (announcements.IsSuccess)
+                return Ok(announcements.Data);
+
+            return StatusCode(500, new { error = announcements.ErrorMessage });
         }
     }
 }

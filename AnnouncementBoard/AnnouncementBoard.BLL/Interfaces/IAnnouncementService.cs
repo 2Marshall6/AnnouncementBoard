@@ -1,5 +1,7 @@
 ﻿
 using AnnouncementBoard.BLL.Models;
+using AnnouncementBoard.BLL.Patterns;
+using AnnouncementBoard.BLL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,9 @@ namespace AnnouncementBoard.BLL.Interfaces
 {
     public interface IAnnouncementService
     {
-        Task CreateAnnouncementAsync(CreateAnnouncementDto createModel);
-        Task UpdateAnnouncementAsync(UpdateAnnouncementDto updateModel);
-        Task<IEnumerable<AnnouncementDto>> GetAnnouncementsAsync();
-        Task DeleteAnnouncementAsync(DeleteAnnouncementDto deleteModel);
+        Task<ServiceResult> CreateAnnouncementAsync(CreateAnnouncementDto createModel);
+        Task<ServiceResult> UpdateAnnouncementAsync(UpdateAnnouncementDto updateModel);
+        Task<ServiceResult<IEnumerable<AnnouncementDto>>> GetAnnouncementsAsync(FilterAnnouncementDto filterModel);
+        Task<ServiceResult> DeleteAnnouncementAsync(DeleteAnnouncementDto deleteModel);
     }
 }

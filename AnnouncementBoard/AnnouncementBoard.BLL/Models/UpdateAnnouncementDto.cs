@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace AnnouncementBoard.BLL.Models
 {
-    public record UpdateAnnouncementDto(int Id, string Title, string Description, bool Status, string Category, string SubCategory);
+    public record UpdateAnnouncementDto(int Id, string? Title, string? Description, bool? Status, string? Category, string? SubCategory);
 }
